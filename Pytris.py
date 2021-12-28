@@ -1,3 +1,4 @@
+import os
 import pygame
 import random
 
@@ -391,19 +392,17 @@ def draw_window(surface, grid, score=0, last_score=0, level_disp=1):
 def update_score(new_score):
     score = max_score()
 
-    f = open('C:\\Users\\gillo\\Documents\\CSCI3430\\a8\\scores.txt', 'w')
-    if int(score) > new_score:
-        f.write(str(score))
-    else:
-        f.write(str(new_score))
-    f.close()  
+    with open(os.path.join(os.sys.path[0], "scores.txt"), "w") as f:
+        if int(score) > new_score:
+            f.write(str(score))
+        else:
+            f.write(str(new_score)) 
 
 def max_score():
-    f = open("C:\\Users\\gillo\\Documents\\CSCI3430\\a8\\scores.txt", "r")
-    lines = f.readlines()
-    score = lines[0].strip()
-    f.close()
-    return score
+    with open(os.path.join(os.sys.path[0], "scores.txt"), "r") as f:
+        lines = f.readlines()
+        score = lines[0].strip()
+        return score
 
 def main(win):
     

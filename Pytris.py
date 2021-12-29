@@ -1,18 +1,22 @@
+'''
+Pytris - A version of modern tetris written in python
+
+Author - Gillom McNeil
+Based off of the tutorial provided by ...
+
+Features to be added:
+- change message after game over depending on result, eg Reward a new highscore
+- should be able to rotate a piece when touching the wall (currently blocked)
+- add a leaderboard displayed in the main menu
+
+'''
+
 import os
 import pygame
 import random
 
 from pygame.display import update
- 
-# creating the data structure for pieces
-# setting up global vars
-# functions
-# - create_grid
-# - draw_grid
-# - draw_window
-# - rotating shape in main
-# - setting up the main
- 
+
 """
 10 x 20 square grid
 shapes: S, Z, I, O, J, L, T
@@ -138,7 +142,7 @@ T = [['.....',
  
 shapes = [S, Z, I, O, L, J, T]
 shape_colors = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
-# index 0 - 6 represent shape
+# index 0 - 6 represents shape
  
 '''
 A Piece can be one of the 7 possible shapes in tetris, each shape type has one

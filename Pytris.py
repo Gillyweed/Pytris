@@ -425,6 +425,7 @@ def main(win):
     stop_timer = 0
     piece_held = False
     button_held = 0
+    score_factor = 1
 
     while run:
         grid = create_grid(locked_positions)
@@ -557,7 +558,14 @@ def main(win):
             next_piece = get_shape()
             change_piece = False
             #once everything is settled, clear the completed rows
-            score += clear_rows(grid, locked_positions) *10 #10 points per row
+            #if num of cleared rows = 4 (tetris), increase multiplicative factor
+            num_cleared_rows = clear_rows(grid, locked_positions)
+            if num_cleared_rows == 4:
+                score_factor += 1
+                score += num_cleared_rows * 10 * score_factor
+            else:
+                score_factor = 1
+                score += num_cleared_rows * 10
             piece_held = False
         
         #draw the game window and the next piece and update display

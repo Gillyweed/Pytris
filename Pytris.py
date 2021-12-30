@@ -8,9 +8,11 @@ Features to be added:
 - change message after game over depending on result, eg Reward a new highscore
 - should be able to rotate a piece when touching the wall (currently blocked)
 - add a leaderboard displayed in the main menu
+- fix random pieces to be less random and more evenly distributed
+    - possibly add a weight to the probability of drawing each piece
+    - probability weight will change based on recent pieces, last 5 pieces?
 
 '''
-
 import os
 import pygame
 import random
@@ -393,14 +395,18 @@ def draw_window(surface, grid, score=0, last_score=0, level_disp=1):
     
     draw_grid(surface, grid)
 
-def update_score(new_score):
+def update_score(new_score, win):
     score = max_score()
 
     with open(os.path.join(os.sys.path[0], "scores.txt"), "w") as f:
         if int(score) > new_score:
             f.write(str(score))
         else:
-            f.write(str(new_score)) 
+            f.write(str(new_score))
+            win.fill((0,0,0))
+            draw_text_middle("HighScore!", 80, (255,255,255), win)
+            pygame.display.update()
+
 
 def max_score():
     with open(os.path.join(os.sys.path[0], "scores.txt"), "r") as f:
@@ -581,13 +587,14 @@ def main(win):
             draw_text_middle("Paused", 80, (255,255,255), win)
         pygame.display.update()
 
-        #if a piece is resting above the top row, you lose
+        #if a piece is resting above the top row, the game is over
         if check_lost(locked_positions):
-            draw_text_middle("YOU LOST!", 80, (255,255,255), win)
+            draw_text_middle("Game Over!", 80, (255,255,255), win)
             pygame.display.update()
-            pygame.time.delay(1500)
+            pygame.time.delay(700)
+            update_score(score, win)
+            pygame.time.delay(700)
             run = False
-            update_score(score)
 
 
 def main_menu(win):

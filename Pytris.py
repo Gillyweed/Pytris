@@ -145,6 +145,7 @@ T = [['.....',
 shapes = [S, Z, I, O, L, J, T]
 shape_colors = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
 # index 0 - 6 represents shape
+shape_shadows = [(0, 64, 0), (64, 0, 0), (0, 64, 64), (64, 64, 0), (64, 41, 0), (0, 0, 64), (32, 0, 32)]
  
 '''
 A Piece can be one of the 7 possible shapes in tetris, each shape type has one
@@ -311,7 +312,9 @@ def clear_rows(grid, locked):
                 locked[newKey] = locked.pop(key)
     return inc
         
- 
+'''
+Draw the next tetromino to fall after the current piece. 
+'''
 def draw_next_shape(shape, surface):
     font = pygame.font.SysFont('microsoftsansserif', 30)
     label = font.render("Next shape:", 1, (255,255,255))
@@ -329,6 +332,9 @@ def draw_next_shape(shape, surface):
 
     surface.blit(label, (sx + 10, sy - 30))
 
+'''
+Draws the piece that is currently being held. This is called when the user presses the shift key.
+'''
 def draw_hold_piece(shape, surface):
     font = pygame.font.SysFont('microsoftsansserif', 30)
     label = font.render("Hold:", 1, (255,255,255))
@@ -346,7 +352,17 @@ def draw_hold_piece(shape, surface):
                     pygame.draw.rect(surface, shape.color, (sx + j*block_size, sy + i*block_size, block_size, block_size), 0)
 
     surface.blit(label, (sx - 25, sy - 50))
- 
+
+'''
+Draws each of the elements in the game window:
+Black background,
+Title, 
+Current Score,
+Highscore,
+Current level/speed,
+game grid,
+the tetromino pieces using the locations in grid.
+'''
 def draw_window(surface, grid, score=0, last_score=0, level_disp=1):
     #start of with a filled black canvas
     surface.fill((0,0,0))
@@ -495,7 +511,6 @@ def main(win):
                     if not(valid_space(current_piece, grid)):
                         current_piece.rotation -= 1
                 if event.key == pygame.K_SPACE:
-                    #harddrop not implemented
                     while valid_space(current_piece, grid):
                         current_piece.y += 1
                     current_piece.y -= 1
@@ -519,7 +534,7 @@ def main(win):
                             next_piece = get_shape()
                             piece_held = True
 
-                if event.key == pygame.K_p:
+                if event.key == pygame.K_p or event.key == pygame.K_ESCAPE:
                     if paused:
                         paused = False
                     else:
@@ -547,7 +562,6 @@ def main(win):
                 if not(valid_space(current_piece, grid)):
                     current_piece.x -= 1
         
-                        
         shape_pos = convert_shape_format(current_piece)
 
         for i in range(len(shape_pos)):
@@ -612,5 +626,5 @@ def main_menu(win):
     pygame.display.quit()
 
 win = pygame.display.set_mode((s_width,s_height))
-pygame.display.set_caption('Tetris')
+pygame.display.set_caption('Pytris')
 main_menu(win)  # start game

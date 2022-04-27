@@ -162,7 +162,8 @@ class Piece(object):
         self.rotation = 0
 
 '''
-create_grid takes a dictionary of x, y pairs as keys and colors as values
+create_grid takes a dictionary of x, y pairs as keys and colors as values.
+This is used to determine what colors each block of the playing field are.
 eg. {(1,1):(255,255,255)} the block at x, y = 1 is white
 returns the grid
 '''
@@ -242,7 +243,7 @@ Return a randomly selected shape from the list of shapes
 '''
 def get_shape():
     # picks a random shape from the given array
-    return Piece(5, 0, random.choice(shapes))
+    return Piece(5, 0, shapes[2])#random.choice(shapes))
  
 '''
 Draw some white text to the middle of the screen
@@ -477,7 +478,15 @@ def main(win):
                 current_piece.y += 1
                 if not(valid_space(current_piece, grid) and current_piece.y > 0):
                     #this means we've hit the bottom and should stop moving
-                    if stop_timer > 1:
+                    if current_piece.x < 0:
+                        current_piece.x += 1
+                        current_piece.y -= 1
+                        stop_timer += 1
+                    elif current_piece.x > 9:
+                        current_piece.x -= 1
+                        current_piece.y -= 1
+                        stop_timer += 1
+                    elif stop_timer > 1:
                         current_piece.y -=1
                         change_piece = True
                         stop_timer = 0
@@ -491,13 +500,13 @@ def main(win):
                 #pygame.display.quit() getting an error here
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_LEFT and current_piece.x > 0:
                     current_piece.x -= 1
                     left_right_pressed = True
                     button_held = 0
                     if not(valid_space(current_piece, grid)):
                         current_piece.x += 1
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and current_piece.x < 9:
                     current_piece.x += 1
                     left_right_pressed = True
                     button_held = 0
